@@ -52,7 +52,7 @@ export default function Hero() {
       if (cancelled) return;
       iframe = document.createElement("iframe");
       iframe.title = "Architecture film";
-      iframe.src = `https://player.vimeo.com/video/${VIDEO_ID}?h=${VIDEO_HASH}&muted=1&controls=0&title=0&byline=0&portrait=0&dnt=1#t=${START}s`;
+      iframe.src = `https://player.vimeo.com/video/${VIDEO_ID}?h=${VIDEO_HASH}&muted=1&controls=0&title=0&byline=0&portrait=0&dnt=1&autoplay=1#t=${START}s`;
       iframe.allow = "autoplay; fullscreen; picture-in-picture; encrypted-media";
       iframe.referrerPolicy = "strict-origin-when-cross-origin";
       iframe.className =
@@ -71,20 +71,30 @@ export default function Hero() {
         ready = true;
         console.info("[hero video] ready");
         player.setVolume(0).catch(() => {});
-        // The embed opens at 0:00 (the logo intro), so keep it hidden until it has jumped to START.
-        // Vimeo only seeks reliably once playback has started: play muted, seek, pause, then reveal.
+        // The embed opens at 0:00 (the logo intro), so keep it hidden until the playhead has
+        // verifiably reached START. autoplay=1&muted=1 means it is already playing, which is
+        // when Vimeo seeks reliably. Seek, pause, then check where we really are; retry if not.
         const reveal = () => gsap.to(iframe, { opacity: 1, duration: 0.6 });
-        const revealTimeout = setTimeout(reveal, 4000);
-        player
-          .play()
-          .then(() => player.setCurrentTime(START))
-          .then(() => player.pause())
-          .then(() => new Promise((r) => setTimeout(r, 200))) // let the seeked frame paint
-          .catch((err) => console.warn("[hero video]", err))
-          .finally(() => {
+        const revealTimeout = setTimeout(() => {
+          console.warn("[hero video] could not confirm seek to START after 10s; revealing anyway");
+          reveal();
+        }, 10000);
+        const seekToStart = async (attempt = 0) => {
+          if (cancelled) return;
+          try {
+            await player.setCurrentTime(START);
+            await player.pause();
+            await new Promise((r) => setTimeout(r, 250)); // let the seeked frame paint
+            const at = await player.getCurrentTime();
+            if (at < START - 0.5 || at > START + 2) throw new Error(`playhead at ${at}s`);
             clearTimeout(revealTimeout);
-            if (!cancelled) reveal();
-          });
+            reveal();
+          } catch (err) {
+            console.warn("[hero video] seek attempt", attempt, err);
+            if (attempt < 8) setTimeout(() => seekToStart(attempt + 1), 500);
+          }
+        };
+        seekToStart();
         timer = setInterval(tick, 120);
       });
     });
