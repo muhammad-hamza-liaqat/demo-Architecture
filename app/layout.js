@@ -1,8 +1,8 @@
 import { Fraunces, Inter } from "next/font/google";
 import "./globals.css";
 
-const serif = Fraunces({ subsets: ["latin"], variable: "--font-serif", axes: ["opsz"] });
-const sans = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const serif = Fraunces({ subsets: ["latin"], variable: "--font-fraunces", axes: ["opsz"] });
+const sans = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata = {
   title: "demo.com — Architecture & Interior Design",
