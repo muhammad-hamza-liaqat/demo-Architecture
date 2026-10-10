@@ -3,12 +3,20 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { HERO_TIME_MAP } from "@/lib/hero-time-map";
 
 // public/videos/hero.mp4 is the 0:59-1:26 cut of the film, encoded with a keyframe on every
 // frame so the playhead can be scrubbed in both directions without stalling.
 const VIDEO_SRC = "/videos/hero.mp4";
 const POSTER_SRC = "/images/hero-poster.jpg";
 const FPS = 24000 / 1001; // source frame rate
+
+// Scroll progress (0..1) -> video time, via a table that evens out the visible speed of the footage.
+const timeAt = (p) => {
+  const x = Math.min(Math.max(p, 0), 1) * (HERO_TIME_MAP.length - 1);
+  const i = Math.min(Math.floor(x), HERO_TIME_MAP.length - 2);
+  return HERO_TIME_MAP[i] + (HERO_TIME_MAP[i + 1] - HERO_TIME_MAP[i]) * (x - i);
+};
 
 const copy = [
   {
@@ -68,7 +76,7 @@ export default function Hero() {
       last = now;
       const d = video.duration;
       if (d) {
-        const target = progress * (d - 0.05);
+        const target = Math.min(timeAt(progress), d - 0.05);
         const k = 1 - Math.exp(-dt / 140); // ~140ms time constant
         shown += (target - shown) * k;
         if (Math.abs(target - shown) < 0.004) shown = target;
