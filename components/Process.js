@@ -27,17 +27,19 @@ const steps = [
 
 export default function Process() {
   return (
-    <section id="process" className="section section--dark">
-      <div className="container">
-        <p className="eyebrow" data-reveal>How we work</p>
-        <h2 className="h2" data-reveal data-delay="0.08">Our Process</h2>
-        <div className="process">
+    <section id="process" className="bg-background-2 py-[clamp(5rem,14vh,9rem)]">
+      <div className="mx-auto w-[min(1120px,100%-2.4rem)]">
+        <p className="text-[0.65rem] uppercase tracking-[0.28em] text-muted-foreground" data-reveal>How we work</p>
+        <h2 className="mt-[0.6rem] font-serif text-[clamp(2rem,4vw,3rem)] font-normal leading-[1.1]" data-reveal data-delay="0.08">Our Process</h2>
+        <div className="mt-[clamp(2.5rem,6vw,4.5rem)] grid grid-cols-1 gap-[clamp(1.5rem,4vw,3.5rem)] min-[801px]:grid-cols-3">
           {steps.map((s, i) => (
-            <article key={s.n} className="process__item" data-reveal data-delay={0.1 * i}>
-              <div className="process__icon">{s.icon}</div>
-              <span className="process__n">{s.n}</span>
-              <h3>{s.title}</h3>
-              <p>{s.text}</p>
+            <article key={s.n} className="relative border-t border-border pt-8" data-reveal data-delay={0.1 * i}>
+              <div className="mb-[1.4rem] grid size-[2.6rem] place-items-center rounded-full border border-border [&_svg]:size-[1.1rem] [&_svg]:fill-none [&_svg]:stroke-primary [&_svg]:stroke-[1.4] [&_svg]:[stroke-linecap:round] [&_svg]:[stroke-linejoin:round]">
+                {s.icon}
+              </div>
+              <span className="absolute right-0 top-8 text-[0.65rem] tracking-[0.2em] text-muted-foreground">{s.n}</span>
+              <h3 className="mb-[0.7rem] font-serif text-xl font-normal">{s.title}</h3>
+              <p className="text-[0.85rem] text-muted-foreground">{s.text}</p>
             </article>
           ))}
         </div>

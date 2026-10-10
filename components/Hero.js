@@ -29,8 +29,8 @@ export default function Hero() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
     const ctx = gsap.context(() => {
-      const imgs = gsap.utils.toArray(".hero__img");
-      const copies = gsap.utils.toArray(".hero__copy");
+      const imgs = gsap.utils.toArray("[data-hero-img]");
+      const copies = gsap.utils.toArray("[data-hero-copy]");
       const n = imgs.length;
 
       gsap.set(imgs, { opacity: 0, scale: 1.0 });
@@ -67,7 +67,7 @@ export default function Hero() {
         }
       });
 
-      gsap.to(".hero__cue", {
+      gsap.to("[data-hero-cue]", {
         opacity: 0,
         scrollTrigger: { trigger: root.current, start: "top top", end: "+=200", scrub: true },
       });
@@ -76,25 +76,34 @@ export default function Hero() {
   }, []);
 
   return (
-    <section id="top" className="hero" ref={root}>
-      <div className="hero__stack">
+    <section id="top" className="relative h-screen overflow-hidden" ref={root}>
+      <div className="absolute inset-0 size-full">
         {stages.map((s, i) => (
           // eslint-disable-next-line @next/next/no-img-element
-          <img key={s.src} className="hero__img" src={s.src} alt="" fetchPriority={i === 0 ? "high" : "auto"} />
+          <img
+            key={s.src}
+            data-hero-img
+            className="absolute inset-0 size-full origin-[50%_55%] object-cover will-change-[transform,opacity]"
+            src={s.src}
+            alt=""
+            fetchPriority={i === 0 ? "high" : "auto"}
+          />
         ))}
-        <div className="hero__shade" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.6)_0%,rgba(0,0,0,0.15)_55%,transparent_100%),linear-gradient(0deg,rgba(0,0,0,0.55)_0%,transparent_40%)]" />
       </div>
 
-      <div className="hero__copies">
+      <div className="absolute bottom-[clamp(3rem,12vh,7rem)] left-[clamp(1.2rem,5vw,4rem)] max-w-[30rem]">
         {stages.filter((s) => s.title).map((s) => (
-          <div key={s.title} className="hero__copy">
-            <h1>{s.title}</h1>
-            <p>{s.text}</p>
+          <div key={s.title} data-hero-copy className="absolute bottom-0 left-0 w-[min(30rem,88vw)] will-change-[transform,opacity,filter]">
+            <h1 className="mb-[1.1rem] font-serif text-[clamp(2.2rem,5.2vw,4rem)] font-normal leading-[1.08]">{s.title}</h1>
+            <p className="max-w-[26rem] text-[0.92rem] text-foreground/80">{s.text}</p>
           </div>
         ))}
       </div>
 
-      <div className="hero__cue">Scroll</div>
+      <div data-hero-cue className="absolute bottom-[2.2rem] right-[clamp(1.2rem,5vw,4rem)] text-[0.65rem] uppercase tracking-[0.3em] text-white/70">
+        Scroll
+      </div>
     </section>
   );
 }
