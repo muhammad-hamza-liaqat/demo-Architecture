@@ -116,7 +116,7 @@ export default function Hero() {
           scrollTrigger: {
             trigger: root.current,
             start: "top top",
-            end: () => `+=${window.innerHeight * (mobile ? 9 : 12)}`,
+            end: () => `+=${window.innerHeight * (mobile ? 12 : 16)}`,
             pin: true,
             anticipatePin: 1,
             invalidateOnRefresh: true,
