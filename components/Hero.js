@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { HERO_TIME_MAP } from "@/lib/hero-time-map";
 
-// public/videos/hero.mp4 is the 0:59-1:26 cut of the film, encoded with a keyframe on every
+// public/videos/hero.mp4 is the 1:14-1:29 cut of the film, encoded with a keyframe on every
 // frame so the playhead can be scrubbed in both directions without stalling.
 const VIDEO_SRC = "/videos/hero.mp4";
 const POSTER_SRC = "/images/hero-poster.jpg";
@@ -124,7 +124,7 @@ export default function Hero() {
           scrollTrigger: {
             trigger: root.current,
             start: "top top",
-            end: () => `+=${window.innerHeight * (mobile ? 12 : 16)}`,
+            end: () => `+=${window.innerHeight * (mobile ? 12 : 9)}`,
             pin: true,
             anticipatePin: 1,
             invalidateOnRefresh: true,
