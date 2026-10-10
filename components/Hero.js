@@ -52,7 +52,7 @@ export default function Hero() {
       if (cancelled) return;
       iframe = document.createElement("iframe");
       iframe.title = "Architecture film";
-      iframe.src = `https://player.vimeo.com/video/${VIDEO_ID}?h=${VIDEO_HASH}&muted=1&controls=0&title=0&byline=0&portrait=0&dnt=1`;
+      iframe.src = `https://player.vimeo.com/video/${VIDEO_ID}?h=${VIDEO_HASH}&muted=1&controls=0&title=0&byline=0&portrait=0&dnt=1#t=${START}s`;
       iframe.allow = "autoplay; fullscreen; picture-in-picture; encrypted-media";
       iframe.referrerPolicy = "strict-origin-when-cross-origin";
       iframe.className =
@@ -70,14 +70,21 @@ export default function Hero() {
         if (cancelled) return;
         ready = true;
         console.info("[hero video] ready");
-        gsap.to(iframe, { opacity: 1, duration: 0.6 });
         player.setVolume(0).catch(() => {});
-        // Vimeo only seeks reliably once playback has started, so play muted, jump to START, then pause.
+        // The embed opens at 0:00 (the logo intro), so keep it hidden until it has jumped to START.
+        // Vimeo only seeks reliably once playback has started: play muted, seek, pause, then reveal.
+        const reveal = () => gsap.to(iframe, { opacity: 1, duration: 0.6 });
+        const revealTimeout = setTimeout(reveal, 4000);
         player
           .play()
           .then(() => player.setCurrentTime(START))
           .then(() => player.pause())
-          .catch((err) => console.warn("[hero video]", err));
+          .then(() => new Promise((r) => setTimeout(r, 200))) // let the seeked frame paint
+          .catch((err) => console.warn("[hero video]", err))
+          .finally(() => {
+            clearTimeout(revealTimeout);
+            if (!cancelled) reveal();
+          });
         timer = setInterval(tick, 120);
       });
     });
@@ -132,9 +139,8 @@ export default function Hero() {
     <section id="top" className="relative h-screen overflow-hidden" ref={root}>
       <div className="absolute inset-0 size-full">
         <div data-hero-video className="absolute inset-0 origin-[50%_55%] will-change-transform">
-          {/* Poster shown until the video is ready. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className="absolute inset-0 size-full object-cover" src="/images/hero-1.jpg" alt="" fetchPriority="high" />
+          {/* Black until the video has seeked to START, so the 0:00 logo intro never shows. */}
+          <div className="absolute inset-0 bg-black" />
           {/* Vimeo iframe is injected here by the effect. */}
           <div ref={holder} className="absolute inset-0" />
         </div>
