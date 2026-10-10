@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { cn } from "@/lib/utils";
 
 const stages = [
   { src: "/images/hero-1.jpg" },
@@ -83,7 +84,7 @@ export default function Hero() {
           <img
             key={s.src}
             data-hero-img
-            className="absolute inset-0 size-full origin-[50%_55%] object-cover will-change-[transform,opacity]"
+            className={cn("absolute inset-0 size-full origin-[50%_55%] object-cover will-change-[transform,opacity]", i === 0 ? "opacity-100" : "opacity-0")}
             src={s.src}
             alt=""
             fetchPriority={i === 0 ? "high" : "auto"}
@@ -94,7 +95,7 @@ export default function Hero() {
 
       <div className="absolute bottom-[clamp(3rem,12vh,7rem)] left-[clamp(1.2rem,5vw,4rem)] max-w-[30rem]">
         {stages.filter((s) => s.title).map((s) => (
-          <div key={s.title} data-hero-copy className="absolute bottom-0 left-0 w-[min(30rem,88vw)] will-change-[transform,opacity,filter]">
+          <div key={s.title} data-hero-copy className="absolute bottom-0 left-0 w-[min(30rem,88vw)] opacity-0 will-change-[transform,opacity,filter]">
             <h1 className="mb-[1.1rem] font-serif text-[clamp(2.2rem,5.2vw,4rem)] font-normal leading-[1.08]">{s.title}</h1>
             <p className="max-w-[26rem] text-[0.92rem] text-foreground/80">{s.text}</p>
           </div>
