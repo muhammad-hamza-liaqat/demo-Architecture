@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-// public/videos/hero.mp4 is the 0:59-1:20 cut of the film, encoded with a keyframe on every
+// public/videos/hero.mp4 is the 0:57-1:26 cut of the film, encoded with a keyframe on every
 // frame so the playhead can be scrubbed in both directions without stalling.
 const VIDEO_SRC = "/videos/hero.mp4";
 const POSTER_SRC = "/images/hero-poster.jpg";
@@ -35,18 +35,23 @@ export default function Hero() {
 
     const video = videoEl.current;
     let progress = 0; // scrub-smoothed scroll progress, 0..1
+    let shown = 0; // eased playhead (seconds) that is actually written to the video
     let raf;
 
-    // Write currentTime once per frame, and only when it actually changed.
-    const render = () => {
+    // Once per frame, ease the playhead toward the scroll position instead of snapping to it.
+    // Frame-rate independent, so it feels the same at 60Hz and 120Hz. Only writes when it moved.
+    let last = performance.now();
+    const loop = (now) => {
+      const dt = Math.min(now - last, 64);
+      last = now;
       const d = video.duration;
       if (d) {
-        const t = progress * (d - 0.05);
-        if (Math.abs(video.currentTime - t) > 0.001) video.currentTime = t;
+        const target = progress * (d - 0.05);
+        const k = 1 - Math.exp(-dt / 90); // ~90ms time constant
+        shown += (target - shown) * k;
+        if (Math.abs(target - shown) < 0.004) shown = target;
+        if (Math.abs(video.currentTime - shown) > 0.004) video.currentTime = shown;
       }
-    };
-    const loop = () => {
-      render();
       raf = requestAnimationFrame(loop);
     };
     raf = requestAnimationFrame(loop);
@@ -86,11 +91,11 @@ export default function Hero() {
           scrollTrigger: {
             trigger: root.current,
             start: "top top",
-            end: () => `+=${window.innerHeight * (mobile ? 3 : 4)}`,
+            end: () => `+=${window.innerHeight * (mobile ? 3.5 : 5)}`,
             pin: true,
             anticipatePin: 1,
             invalidateOnRefresh: true,
-            scrub: 0.5,
+            scrub: 0.3,
           },
         });
 
