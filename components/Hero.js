@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-// public/videos/hero.mp4 is the 0:57-1:26 cut of the film, encoded with a keyframe on every
+// public/videos/hero.mp4 is the 0:59-1:26 cut of the film, encoded with a keyframe on every
 // frame so the playhead can be scrubbed in both directions without stalling.
 const VIDEO_SRC = "/videos/hero.mp4";
 const POSTER_SRC = "/images/hero-poster.jpg";
