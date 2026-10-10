@@ -4,10 +4,10 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const VIDEO_ID = "1061310840";
-const VIDEO_HASH = "8e047906e0";
-const START = 59; // 0:59
-const END = 80; // 1:20
+// public/videos/hero.mp4 is the 0:59-1:20 cut of the film, encoded with a keyframe on every
+// frame so the playhead can be scrubbed in both directions without stalling.
+const VIDEO_SRC = "/videos/hero.mp4";
+const POSTER_SRC = "/images/hero-poster.jpg";
 
 const copy = [
   {
@@ -26,99 +26,43 @@ const copy = [
 
 export default function Hero() {
   const root = useRef(null);
-  const holder = useRef(null);
+  const videoEl = useRef(null);
 
   useEffect(() => {
     // Stop the mobile URL bar showing/hiding from re-measuring (and jolting) the pinned hero.
     ScrollTrigger.config({ ignoreMobileResize: true });
     gsap.registerPlugin(ScrollTrigger);
 
-    let player;
-    let iframe;
-    let target = START; // where the (smoothed) scroll says the playhead should be
-    let current = START; // eased value actually sent to the player
-    let lastSent = START;
-    let live = false; // scrubbing only starts once the video is revealed at START
-    let busy = false;
-    let timer;
-    let cancelled = false;
+    const video = videoEl.current;
+    let progress = 0; // scrub-smoothed scroll progress, 0..1
+    let raf;
 
-    // Seeking is a network round-trip. Wait for each seek to finish before sending the next
-    // (queued seeks are what makes scrubbing feel like it's stuck), and ease toward the target
-    // so the requests are small, continuous steps rather than big jumps.
-    const step = async () => {
-      if (cancelled) return;
-      if (live && !busy) {
-        current += (target - current) * 0.4;
-        if (Math.abs(target - current) < 0.03) current = target;
-        if (Math.abs(current - lastSent) >= 0.04) {
-          busy = true;
-          lastSent = current;
-          try {
-            await player.setCurrentTime(current);
-          } catch {}
-          busy = false;
-        }
+    // Write currentTime once per frame, and only when it actually changed.
+    const render = () => {
+      const d = video.duration;
+      if (d) {
+        const t = progress * (d - 0.05);
+        if (Math.abs(video.currentTime - t) > 0.001) video.currentTime = t;
       }
-      timer = setTimeout(step, 40);
     };
+    const loop = () => {
+      render();
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
 
-    // The iframe is created here (not in JSX) because Player.destroy() removes it
-    // from the DOM, which would otherwise clash with React's own unmounting.
-    import("@vimeo/player").then(({ default: Player }) => {
-      if (cancelled) return;
-      iframe = document.createElement("iframe");
-      iframe.title = "Architecture film";
-      iframe.src = `https://player.vimeo.com/video/${VIDEO_ID}?h=${VIDEO_HASH}&muted=1&controls=0&title=0&byline=0&portrait=0&dnt=1&autoplay=1&playsinline=1#t=${START}s`;
-      iframe.allow = "autoplay; fullscreen; picture-in-picture; encrypted-media";
-      iframe.referrerPolicy = "strict-origin-when-cross-origin";
-      // 16:9 box that always covers the hero, on landscape and portrait screens alike.
-      iframe.className =
-        "pointer-events-none absolute left-1/2 top-1/2 h-[max(100svh,56.25vw)] w-[max(100vw,177.78svh)] -translate-x-1/2 -translate-y-1/2 border-0 opacity-0";
-      holder.current.appendChild(iframe);
-      player = new Player(iframe);
-      player.on("error", (e) => console.warn("[hero video] player error", e));
-      // If Vimeo never reports ready (blocked embed, privacy settings), show its own error instead of hiding it.
-      const giveUp = setTimeout(() => {
-        console.warn("[hero video] player not ready after 8s; revealing iframe so Vimeo's message is visible");
-        gsap.to(iframe, { opacity: 1, duration: 0.3 });
-      }, 8000);
-      player.ready().then(() => {
-        clearTimeout(giveUp);
-        if (cancelled) return;
-        console.info("[hero video] ready");
-        player.setVolume(0).catch(() => {});
-        // The embed opens at 0:00 (the logo intro), so keep it hidden until the playhead has
-        // verifiably reached START. autoplay=1&muted=1 means it is already playing, which is
-        // when Vimeo seeks reliably. Seek, pause, then check where we really are; retry if not.
-        const reveal = () => {
-          lastSent = current = START;
-          live = true;
-          gsap.to(iframe, { opacity: 1, duration: 0.6 });
-        };
-        const revealTimeout = setTimeout(() => {
-          console.warn("[hero video] could not confirm seek to START after 10s; revealing anyway");
-          reveal();
-        }, 10000);
-        const seekToStart = async (attempt = 0) => {
-          if (cancelled) return;
-          try {
-            await player.setCurrentTime(START);
-            await player.pause();
-            await new Promise((r) => setTimeout(r, 250)); // let the seeked frame paint
-            const at = await player.getCurrentTime();
-            if (at < START - 0.5 || at > START + 2) throw new Error(`playhead at ${at}s`);
-            clearTimeout(revealTimeout);
-            reveal();
-          } catch (err) {
-            console.warn("[hero video] seek attempt", attempt, err);
-            if (attempt < 8) setTimeout(() => seekToStart(attempt + 1), 500);
-          }
-        };
-        seekToStart();
-        step();
-      });
-    });
+    // iOS Safari won't paint seeked frames until the video has been "played" once.
+    // Do that on the first touch/scroll (muted + playsinline is allowed), then pause straight away.
+    const unlock = () => {
+      video.play().then(() => video.pause()).catch(() => {});
+      removeUnlock();
+    };
+    const removeUnlock = () => {
+      window.removeEventListener("touchstart", unlock);
+      window.removeEventListener("scroll", unlock);
+    };
+    window.addEventListener("touchstart", unlock, { passive: true, once: true });
+    window.addEventListener("scroll", unlock, { passive: true, once: true });
 
     const mm = gsap.matchMedia();
     mm.add(
@@ -135,10 +79,9 @@ export default function Hero() {
         const total = 7;
         const tl = gsap.timeline({
           defaults: { ease: "none" },
-          // The timeline's playhead is the scrub-smoothed scroll position, so the video follows
-          // that rather than the raw (jumpy) scroll value.
+          // The timeline's playhead is the scrub-smoothed scroll position; the video follows it.
           onUpdate: () => {
-            target = START + (END - START) * tl.progress();
+            progress = tl.progress();
           },
           scrollTrigger: {
             trigger: root.current,
@@ -147,12 +90,12 @@ export default function Hero() {
             pin: true,
             anticipatePin: 1,
             invalidateOnRefresh: true,
-            scrub: 0.8,
+            scrub: 0.5,
           },
         });
 
         // Slow push-in across the whole scroll (gentler on phones).
-        tl.fromTo("[data-hero-video]", { scale: 1.0 }, { scale: mobile ? 1.08 : 1.15, duration: total }, 0);
+        tl.fromTo("[data-hero-video]", { scale: 1.0 }, { scale: mobile ? 1.06 : 1.12, duration: total }, 0);
 
         // Headline stages fade in/out against the footage.
         copies.forEach((el, i) => {
@@ -173,21 +116,27 @@ export default function Hero() {
     );
 
     return () => {
-      cancelled = true;
-      clearTimeout(timer);
+      cancelAnimationFrame(raf);
+      removeUnlock();
       mm.revert();
-      (player ? player.destroy().catch(() => {}) : Promise.resolve()).finally(() => iframe?.remove());
     };
   }, []);
 
   return (
-    <section id="top" className="relative h-svh overflow-hidden" ref={root}>
+    <section id="top" className="relative h-svh overflow-hidden bg-black" ref={root}>
       <div className="absolute inset-0 size-full">
         <div data-hero-video className="absolute inset-0 origin-[50%_55%] transform-gpu will-change-transform">
-          {/* Black until the video has seeked to START, so the 0:00 logo intro never shows. */}
-          <div className="absolute inset-0 bg-black" />
-          {/* Vimeo iframe is injected here by the effect. */}
-          <div ref={holder} className="absolute inset-0" />
+          <video
+            ref={videoEl}
+            className="absolute inset-0 size-full object-cover"
+            src={VIDEO_SRC}
+            poster={POSTER_SRC}
+            muted
+            playsInline
+            preload="auto"
+            disablePictureInPicture
+            aria-hidden="true"
+          />
         </div>
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.6)_0%,rgba(0,0,0,0.15)_55%,transparent_100%),linear-gradient(0deg,rgba(0,0,0,0.55)_0%,transparent_40%)]" />
         {/* Extra bottom scrim on phones, where the text sits over the full width of the footage. */}
