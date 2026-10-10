@@ -132,6 +132,13 @@ export default function Hero() {
           },
         });
 
+        // A 16:9 video cropped to a portrait screen only shows its middle third. On phones, drift
+        // the crop sideways across the scroll so more of the frame is seen (kept gentle: the
+        // footage already moves, and a fast pan on top would read as shake).
+        if (mobile) {
+          tl.fromTo("[data-hero-video-el]", { objectPosition: "30% 50%" }, { objectPosition: "70% 50%", duration: total }, 0);
+        }
+
         // Headline stages fade in/out against the footage.
         copies.forEach((el, i) => {
           const at = 0.8 + i * 2;
@@ -165,6 +172,7 @@ export default function Hero() {
         <div data-hero-video className="absolute inset-0">
           <video
             ref={videoEl}
+            data-hero-video-el
             className="absolute inset-0 size-full object-cover"
             poster={POSTER_SRC}
             muted
@@ -182,7 +190,7 @@ export default function Hero() {
       <div className="absolute bottom-[clamp(3.5rem,12vh,7rem)] left-[clamp(1.2rem,5vw,4rem)] max-w-120">
         {copy.map((s) => (
           <div key={s.title} data-hero-copy className="absolute bottom-0 left-0 w-[min(30rem,calc(100vw-2.4rem))] opacity-0 will-change-[transform,opacity]">
-            <h1 className="mb-[1.1rem] font-serif text-[clamp(2rem,5.2vw,4rem)] font-normal leading-[1.08]">{s.title}</h1>
+            <h1 className="mb-[1.1rem] font-serif text-[clamp(2rem,5.2vw,4rem)] font-normal leading-[1.08] text-balance">{s.title}</h1>
             <p className="max-w-104 text-[0.92rem] text-foreground/80">{s.text}</p>
           </div>
         ))}
