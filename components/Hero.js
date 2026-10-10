@@ -5,8 +5,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { HERO_TIME_MAP } from "@/lib/hero-time-map";
 
-// public/videos/hero.mp4 is the 1:14-1:29 cut of the film, encoded with a keyframe on every
-// frame so the playhead can be scrubbed in both directions without stalling.
+// public/videos/hero.mp4 is the 1:14-1:29 cut of the film, encoded small (a keyframe every 8 frames)
+// so it downloads quickly yet can still be scrubbed in both directions without stalling.
 const VIDEO_SRC = `/videos/hero.mp4?v=${process.env.NEXT_PUBLIC_ASSET_V ?? ""}`;
 const POSTER_SRC = "/images/hero-poster.jpg";
 const FPS = 24000 / 1001; // source frame rate
@@ -43,51 +43,24 @@ export default function Hero() {
     gsap.registerPlugin(ScrollTrigger);
 
     const video = videoEl.current;
-    const cue = root.current.querySelector("[data-hero-cue]");
     let cancelled = false;
     let objectUrl;
 
-    // The hero is a scrub through the video, so it must start at the top, with the whole clip
-    // already in memory. Otherwise a refresh restores a mid-page scroll position, or the visitor
-    // scrolls while the file is still downloading, and the animation appears to start "from the middle".
+    // A refresh would otherwise restore a mid-page scroll position, and the scrub would appear to
+    // start "from the middle". Always open the hero at its beginning (unless the URL has a #section).
     const prevRestoration = history.scrollRestoration;
     history.scrollRestoration = "manual";
     if (!location.hash) window.scrollTo(0, 0);
 
-    let locked = true;
-    const stop = (e) => locked && e.cancelable && e.preventDefault();
-    const keepTop = () => locked && window.scrollTo(0, 0);
-    window.addEventListener("wheel", stop, { passive: false });
-    window.addEventListener("touchmove", stop, { passive: false });
-    window.addEventListener("scroll", keepTop, { passive: true });
-    const setCue = (text) => {
-      if (cue) cue.textContent = text;
-    };
-    setCue("Loading 0%");
-
-    // Download with progress; retry a couple of times on a flaky connection.
+    // Download the (small, ~3MB) clip into memory so every seek is instant. Nothing blocks the page
+    // while it loads: the poster shows, scrolling works, and the video joins in as soon as it arrives.
+    // Retry a couple of times on a flaky connection.
     const loadVideo = async () => {
       for (let attempt = 0; attempt < 3; attempt++) {
         try {
           const res = await fetch(VIDEO_SRC);
           if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          const total = Number(res.headers.get("content-length")) || 0;
-          if (!res.body || !total) return await res.blob();
-          const reader = res.body.getReader();
-          const chunks = [];
-          let got = 0;
-          for (;;) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            chunks.push(value);
-            got += value.length;
-            setCue(`Loading ${Math.min(100, Math.round((got / total) * 100))}%`);
-            if (cancelled) {
-              reader.cancel();
-              return null;
-            }
-          }
-          return new Blob(chunks, { type: "video/mp4" });
+          return await res.blob();
         } catch (err) {
           if (cancelled) return null;
           console.warn(`[hero video] download attempt ${attempt + 1} failed`, err);
@@ -97,9 +70,6 @@ export default function Hero() {
       return null;
     };
 
-    // Scrubbing needs instant random access. Streaming the file means every seek outside the
-    // buffered range is a network request, which shows up as the frame sticking. So play the clip
-    // from memory, and only let the visitor into the animation once it is ready.
     (async () => {
       const blob = await loadVideo();
       if (cancelled) return;
@@ -111,16 +81,6 @@ export default function Hero() {
         video.src = VIDEO_SRC;
       }
       video.load();
-      await new Promise((resolve) => {
-        if (video.readyState >= 2) return resolve();
-        video.addEventListener("loadeddata", resolve, { once: true });
-        video.addEventListener("error", resolve, { once: true });
-        setTimeout(resolve, 8000);
-      });
-      if (cancelled) return;
-      locked = false;
-      setCue("Scroll");
-      ScrollTrigger.refresh();
     })();
 
     let progress = 0; // scrub-smoothed scroll progress, 0..1
@@ -218,10 +178,6 @@ export default function Hero() {
 
     return () => {
       cancelled = true;
-      locked = false;
-      window.removeEventListener("wheel", stop);
-      window.removeEventListener("touchmove", stop);
-      window.removeEventListener("scroll", keepTop);
       history.scrollRestoration = prevRestoration;
       if (objectUrl) URL.revokeObjectURL(objectUrl);
       cancelAnimationFrame(raf);
