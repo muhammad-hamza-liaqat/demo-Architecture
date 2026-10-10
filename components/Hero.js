@@ -8,6 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 // frame so the playhead can be scrubbed in both directions without stalling.
 const VIDEO_SRC = "/videos/hero.mp4";
 const POSTER_SRC = "/images/hero-poster.jpg";
+const FPS = 24000 / 1001; // source frame rate
 
 const copy = [
   {
@@ -34,6 +35,27 @@ export default function Hero() {
     gsap.registerPlugin(ScrollTrigger);
 
     const video = videoEl.current;
+    let cancelled = false;
+    let objectUrl;
+
+    // Scrubbing needs instant random access. Streaming the file means every seek outside the
+    // buffered range is a network request, which shows up as the frame sticking. So download the
+    // whole clip once and play it from memory; the poster shows until it is ready.
+    fetch(VIDEO_SRC)
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.blob();
+      })
+      .then((blob) => {
+        if (cancelled) return;
+        objectUrl = URL.createObjectURL(blob);
+        video.src = objectUrl;
+        video.load();
+      })
+      .catch((err) => {
+        console.warn("[hero video] could not preload, falling back to streaming", err);
+        if (!cancelled) video.src = VIDEO_SRC;
+      });
     let progress = 0; // scrub-smoothed scroll progress, 0..1
     let shown = 0; // eased playhead (seconds) that is actually written to the video
     let raf;
@@ -50,7 +72,10 @@ export default function Hero() {
         const k = 1 - Math.exp(-dt / 90); // ~90ms time constant
         shown += (target - shown) * k;
         if (Math.abs(target - shown) < 0.004) shown = target;
-        if (Math.abs(video.currentTime - shown) > 0.004) video.currentTime = shown;
+        // Snap to the middle of a source frame, and never start a seek while one is still in
+        // flight: overlapping seeks can paint frames out of order, which reads as shaking.
+        const frameTime = Math.min((Math.round(shown * FPS) + 0.5) / FPS, d - 0.05);
+        if (!video.seeking && Math.abs(video.currentTime - frameTime) > 0.5 / FPS) video.currentTime = frameTime;
       }
       raf = requestAnimationFrame(loop);
     };
@@ -99,9 +124,6 @@ export default function Hero() {
           },
         });
 
-        // Slow push-in across the whole scroll (gentler on phones).
-        tl.fromTo("[data-hero-video]", { scale: 1.0 }, { scale: mobile ? 1.06 : 1.12, duration: total }, 0);
-
         // Headline stages fade in/out against the footage.
         copies.forEach((el, i) => {
           const at = 0.8 + i * 2;
@@ -121,6 +143,8 @@ export default function Hero() {
     );
 
     return () => {
+      cancelled = true;
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
       cancelAnimationFrame(raf);
       removeUnlock();
       mm.revert();
@@ -130,11 +154,10 @@ export default function Hero() {
   return (
     <section id="top" className="relative h-svh overflow-hidden bg-black" ref={root}>
       <div className="absolute inset-0 size-full">
-        <div data-hero-video className="absolute inset-0 origin-[50%_55%] transform-gpu will-change-transform">
+        <div data-hero-video className="absolute inset-0">
           <video
             ref={videoEl}
             className="absolute inset-0 size-full object-cover"
-            src={VIDEO_SRC}
             poster={POSTER_SRC}
             muted
             playsInline
