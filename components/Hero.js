@@ -69,7 +69,7 @@ export default function Hero() {
       const d = video.duration;
       if (d) {
         const target = progress * (d - 0.05);
-        const k = 1 - Math.exp(-dt / 90); // ~90ms time constant
+        const k = 1 - Math.exp(-dt / 140); // ~140ms time constant
         shown += (target - shown) * k;
         if (Math.abs(target - shown) < 0.004) shown = target;
         // Snap to the middle of a source frame, and never start a seek while one is still in
@@ -116,7 +116,7 @@ export default function Hero() {
           scrollTrigger: {
             trigger: root.current,
             start: "top top",
-            end: () => `+=${window.innerHeight * (mobile ? 3.5 : 5)}`,
+            end: () => `+=${window.innerHeight * (mobile ? 9 : 12)}`,
             pin: true,
             anticipatePin: 1,
             invalidateOnRefresh: true,
