@@ -8,7 +8,9 @@ import { HERO_TIME_MAP } from "@/lib/hero-time-map";
 // public/videos/hero.mp4 is the 1:14-1:29 cut of the film, encoded small (a keyframe every 8 frames)
 // so it downloads quickly yet can still be scrubbed in both directions without stalling.
 const VIDEO_SRC = `/videos/hero.mp4?v=${process.env.NEXT_PUBLIC_ASSET_V ?? ""}`;
-const POSTER_SRC = "/images/hero-poster.jpg";
+// The still shown at rest (house, nobody outside). It dissolves into the footage as you scroll, and back on the way up.
+const START_SRC = `/images/hero-start.jpg?v=${process.env.NEXT_PUBLIC_ASSET_V ?? ""}`;
+const POSTER_SRC = `/images/hero-poster.jpg?v=${process.env.NEXT_PUBLIC_ASSET_V ?? ""}`;
 const FPS = 24000 / 1001; // source frame rate
 
 // Scroll progress (0..1) -> video time, via a table that evens out the visible speed of the footage.
@@ -176,6 +178,9 @@ export default function Hero() {
           tl.fromTo("[data-hero-video-el]", { objectPosition: "30% 50%" }, { objectPosition: "70% 50%", duration: total }, 0);
         }
 
+        // Dissolve the resting still into the footage over the first stretch of scroll (and back when returning).
+        tl.fromTo("[data-hero-start]", { opacity: 1 }, { opacity: 0, duration: 0.45 }, 0.08);
+
         // Headline stages fade in/out against the footage.
         copies.forEach((el, i) => {
           const at = 0.8 + i * 2;
@@ -218,6 +223,14 @@ export default function Hero() {
             preload="auto"
             disablePictureInPicture
             aria-hidden="true"
+          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            data-hero-start
+            src={START_SRC}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 size-full object-cover max-[800px]:object-[30%_50%]"
           />
         </div>
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.6)_0%,rgba(0,0,0,0.15)_55%,transparent_100%),linear-gradient(0deg,rgba(0,0,0,0.55)_0%,transparent_40%)]" />
