@@ -58,6 +58,9 @@ export default function Hero() {
   const videoEl = useRef(null);
 
   useEffect(() => {
+    // Phones get a still hero (no video download, no pinned scroll animation). Tablets and up keep the animation.
+    if (window.matchMedia("(max-width: 599px)").matches) return;
+
     // Stop the mobile URL bar showing/hiding from re-measuring (and jolting) the pinned hero.
     ScrollTrigger.config({ ignoreMobileResize: true });
     gsap.registerPlugin(ScrollTrigger);
@@ -210,13 +213,13 @@ export default function Hero() {
   }, []);
 
   return (
-    <section id="top" className="relative h-svh overflow-hidden bg-black" ref={root}>
-      <div className="absolute inset-0 size-full">
+    <section id="top" className="relative h-svh overflow-hidden bg-black max-[599px]:h-auto max-[599px]:bg-background max-[599px]:px-[1.2rem] max-[599px]:pb-14 max-[599px]:pt-32" ref={root}>
+      <div className="absolute inset-0 size-full max-[599px]:hidden">
         <div data-hero-video className="absolute inset-0">
           <video
             ref={videoEl}
             data-hero-video-el
-            className="absolute inset-0 size-full object-cover"
+            className="absolute inset-0 size-full object-cover max-[599px]:hidden"
             poster={POSTER_SRC}
             muted
             playsInline
@@ -238,11 +241,11 @@ export default function Hero() {
         <div className="absolute inset-0 bg-linear-to-t from-black/75 via-black/20 to-transparent min-[801px]:hidden" />
       </div>
 
-      <div className="absolute bottom-[clamp(3.5rem,12vh,7rem)] left-[clamp(1.2rem,5vw,4rem)] max-w-120">
-        {copy.map((s) => (
-          <div key={s.title} data-hero-copy className="pointer-events-none absolute bottom-0 left-0 w-[min(36rem,calc(100vw-2.4rem))] opacity-0 will-change-[transform,opacity]">
+      <div className="absolute bottom-[clamp(3.5rem,12vh,7rem)] left-[clamp(1.2rem,5vw,4rem)] max-w-120 max-[599px]:static max-[599px]:grid max-[599px]:max-w-none max-[599px]:gap-12">
+        {copy.map((s, i) => (
+          <div key={s.title} data-hero-copy className={`pointer-events-none absolute bottom-0 left-0 w-[min(36rem,calc(100vw-2.4rem))] opacity-0 will-change-[transform,opacity] max-[599px]:pointer-events-auto max-[599px]:static max-[599px]:w-full max-[599px]:opacity-100`}>
             <div className="flex items-start gap-5">
-              <h1 className="mb-[1.1rem] min-w-0 font-serif text-[clamp(1.9rem,4.8vw,3.7rem)] font-normal leading-[1.08]">{s.title}</h1>
+              <h1 className={`mb-[1.1rem] min-w-0 font-serif text-[clamp(1.9rem,4.8vw,3.7rem)] font-normal leading-[1.08]${i > 0 ? " max-[599px]:text-[1.6rem]" : ""}`}>{s.title}</h1>
               {s.badge && <Badge />}
             </div>
             {s.text && <p className="max-w-104 text-[0.92rem] text-foreground/80">{s.text}</p>}
@@ -265,7 +268,7 @@ export default function Hero() {
         ))}
       </div>
 
-      <div data-hero-cue className="absolute bottom-[1.6rem] right-[clamp(1.2rem,5vw,4rem)] text-[0.65rem] uppercase tracking-[0.3em] text-white/70 min-[801px]:bottom-[2.2rem]">
+      <div data-hero-cue className="absolute max-[599px]:hidden bottom-[1.6rem] right-[clamp(1.2rem,5vw,4rem)] text-[0.65rem] uppercase tracking-[0.3em] text-white/70 min-[801px]:bottom-[2.2rem]">
         Défiler
       </div>
     </section>
