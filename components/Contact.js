@@ -19,8 +19,8 @@ export default function Contact() {
     <section id="contact" className="bg-background py-[clamp(5rem,14vh,9rem)] glow">
       <div className="mx-auto w-[min(640px,100%-2.4rem)] rounded-3xl border border-border bg-white/2.5 p-[clamp(1.5rem,5vw,3rem)]">
         <p className="eyebrow" data-reveal>Contact</p>
-        <h2 className="h2" data-reveal>Démarrez votre projet</h2>
-        <p className="mt-[0.4rem] text-[0.8rem] text-muted-foreground" data-reveal data-delay="0.08">demo.com — Architecture et design d&apos;intérieur</p>
+        <h2 className="h2" data-reveal>Formulaire de contact</h2>
+        <p className="mt-[0.4rem] text-[0.8rem] text-muted-foreground" data-reveal data-delay="0.08">Obtenez votre offre de location</p>
 
         {sent ? (
           <p className="mt-[2.2rem] text-primary" data-reveal>Merci — nous vous répondrons très bientôt.</p>
@@ -52,12 +52,12 @@ export default function Contact() {
             </div>
             <div>
               <Label htmlFor="message">Message</Label>
-              <Textarea id="message" name="message" rows={4} placeholder="Parlez-nous de votre projet" required />
+              <Textarea id="message" name="message" rows={4} placeholder="Décrivez votre besoin" required />
             </div>
             <p className="text-[0.7rem] text-muted-foreground">
-              Les renseignements transmis serviront uniquement à vous répondre au sujet de nos services.
+              Les informations transmises serviront à vous contacter au sujet de nos produits et services. Consultez notre déclaration de confidentialité.
             </p>
-            <Button type="submit" className="justify-self-start">Envoyer le message</Button>
+            <Button type="submit" className="justify-self-start">Envoyer</Button>
           </form>
         )}
       </div>

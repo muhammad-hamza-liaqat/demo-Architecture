@@ -1,41 +1,31 @@
+import SectionHead from "@/components/SectionHead";
+
 const services = [
-  {
-    title: "Particuliers",
-    text: "Maison neuve, agrandissement ou rénovation : un accompagnement complet, de l'esquisse à la remise des clés, pour un projet à votre image.",
-    points: ["Études de faisabilité", "Plans et permis", "Suivi de chantier"],
-  },
-  {
-    title: "Entreprises",
-    text: "Bureaux, commerces et espaces d'accueil pensés pour votre marque et le bien-être de vos équipes, livrés clé en main.",
-    points: ["Aménagement d'espaces", "Image de marque", "Coordination des corps de métier"],
-  },
-  {
-    title: "Promoteurs et assureurs",
-    text: "Projets multirésidentiels, reconstructions après sinistre : une réponse rapide, rigoureuse et conforme aux exigences réglementaires.",
-    points: ["Reconstruction après sinistre", "Projets multilogements", "Livraison dans les délais"],
-  },
+  { title: "Particuliers", text: "Vous devez vous relocaliser temporairement ?", img: "/images/tip-1.jpg" },
+  { title: "Entreprises", text: "Vous souhaitez loger vos employés ?", img: "/images/tip-2.jpg" },
+  { title: "Sinistrés / Assureurs", text: "Vous êtes victime d'un sinistre et vous ne pouvez plus habiter dans votre résidence ?", img: "/images/tip-3.jpg" },
 ];
 
 export default function Services() {
   return (
-    <section id="services" className="bg-background py-[clamp(5rem,14vh,9rem)] glow">
+    <section id="services" className="glow bg-background py-[clamp(5rem,14vh,9rem)]">
       <div className="mx-auto w-[min(1120px,100%-2.4rem)]">
-        <p className="eyebrow" data-reveal>Pour qui</p>
-        <h2 className="h2" data-reveal data-delay="0.08">Nos services</h2>
-        <div className="mt-[clamp(2.5rem,6vw,4.5rem)] grid grid-cols-1 gap-[clamp(1.5rem,4vw,3rem)] min-[801px]:grid-cols-3">
+        <SectionHead eyebrow="Nos services" title="La solution d'hébergement pour vous." />
+        <div className="mt-[clamp(2.5rem,6vw,4rem)] grid grid-cols-1 gap-5 min-[801px]:grid-cols-3">
           {services.map((s, i) => (
-            <article key={s.title} className="card" data-reveal data-delay={0.1 * i}>
-              <h3 className="mb-[0.8rem] font-serif text-xl font-normal">{s.title}</h3>
-              <p className="text-[0.85rem] text-muted-foreground">{s.text}</p>
-              <ul className="mt-5 grid gap-2 text-[0.8rem] text-foreground/80">
-                {s.points.map((p) => (
-                  <li key={p} className="flex items-center gap-3">
-                    <span className="size-1 shrink-0 rounded-full bg-primary" />
-                    {p}
-                  </li>
-                ))}
-              </ul>
-            </article>
+            <a key={s.title} href="#contact" className="card group flex flex-col overflow-hidden !p-0" data-reveal data-delay={0.1 * i}>
+              <div className="overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={s.img} alt="" loading="lazy" className="aspect-[16/10] w-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+              </div>
+              <div className="flex flex-1 flex-col p-7">
+                <p className="text-[0.62rem] uppercase tracking-[0.25em] text-primary">{s.title}</p>
+                <p className="mt-3 flex-1 font-serif text-[1.25rem] leading-snug">{s.text}</p>
+                <span className="mt-6 inline-flex items-center gap-2 text-[0.65rem] uppercase tracking-[0.2em] text-foreground/70 group-hover:text-primary">
+                  En savoir plus <span className="transition-transform group-hover:translate-x-1">→</span>
+                </span>
+              </div>
+            </a>
           ))}
         </div>
       </div>

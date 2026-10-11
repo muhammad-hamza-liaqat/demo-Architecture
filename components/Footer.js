@@ -1,10 +1,10 @@
 const icon = "size-[1.05rem] fill-none stroke-current stroke-[1.5] [stroke-linecap:round] [stroke-linejoin:round]";
 
 const nav = [
-  { href: "#process", label: "Processus" },
-  { href: "#tips", label: "Conseils" },
-  { href: "#projects", label: "Projets" },
+  { href: "#kondos", label: "Kondos" },
+  { href: "#solutions", label: "Solutions" },
   { href: "#services", label: "Services" },
+  { href: "#blogue", label: "Blogue" },
   { href: "#faq", label: "FAQ" },
   { href: "#contact", label: "Contact" },
 ];
@@ -45,7 +45,7 @@ export default function Footer() {
           ))}
         </div>
       </div>
-      <p className="border-t border-border py-3 text-center text-[0.65rem] tracking-[0.08em] text-muted-foreground">© {new Date().getFullYear()} demo.com</p>
+      <p className="border-t border-border py-3 text-center text-[0.65rem] tracking-[0.08em] text-muted-foreground">© demo.com {new Date().getFullYear()}</p>
     </footer>
   );
 }

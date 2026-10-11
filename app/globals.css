@@ -49,6 +49,35 @@
   }
 }
 
+@keyframes marquee {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@layer utilities {
+  /* Two identical groups side by side; sliding exactly -50% lands the second on the first, so the loop has no seam. */
+  .marquee-track {
+    animation: marquee var(--marquee-duration, 60s) linear infinite;
+    will-change: transform;
+  }
+  .marquee:hover .marquee-track,
+  .marquee:focus-within .marquee-track {
+    animation-play-state: paused;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee {
+      overflow-x: auto;
+    }
+    .marquee-track {
+      animation: none;
+    }
+    .marquee-dup {
+      display: none;
+    }
+  }
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;

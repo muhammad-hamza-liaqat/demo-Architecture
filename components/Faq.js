@@ -1,18 +1,18 @@
 const faqs = [
-  { q: "Combien de temps dure un projet d'architecture ?", a: "Cela dépend de l'ampleur : comptez quelques semaines pour une étude préliminaire, puis de 3 à 6 mois pour les plans et permis d'une maison. Nous vous donnons un calendrier précis dès la première rencontre." },
-  { q: "Intervenez-vous seulement sur les nouvelles constructions ?", a: "Non. Nous travaillons aussi bien sur des constructions neuves que sur des rénovations, agrandissements et réaménagements intérieurs." },
-  { q: "Pouvez-vous gérer le design d'intérieur et l'architecture ensemble ?", a: "Oui, c'est notre approche : les intérieurs sont conçus en même temps que le bâtiment, pour une cohérence totale des matériaux, du mobilier et des volumes." },
-  { q: "Comment le budget est-il établi ?", a: "Après l'analyse de vos besoins et du terrain, nous proposons une estimation par phase. Aucune dépense n'est engagée sans votre accord." },
-  { q: "Travaillez-vous avec des entrepreneurs de mon choix ?", a: "Bien sûr. Nous pouvons coordonner vos entrepreneurs ou vous recommander des partenaires de confiance." },
-  { q: "Comment démarrer ?", a: "Remplissez le formulaire de contact ci-dessous : nous vous recontactons pour une première discussion, sans engagement." },
+  { q: "Quelle est la durée minimale de location ?", a: "Nos locations débutent à 31 jours. Elles sont ensuite prolongeables au jour, à la semaine ou au mois, avec des tarifs mensuels avantageux." },
+  { q: "Les unités sont-elles meublées ?", a: "Oui, toutes nos unités sont 100 % meublées, avec électroménagers et literie inclus. Il suffit d'arriver avec votre valise." },
+  { q: "À quelle vitesse puis-je emménager ?", a: "La prise de possession est rapide : vous choisissez la date souhaitée, et certaines unités peuvent être disponibles dès le jour même de votre demande." },
+  { q: "Y a-t-il un engagement à long terme ?", a: "Non. Aucun engagement à long terme n'est requis : vous gardez la liberté de rester le temps qu'il vous faut." },
+  { q: "Offrez-vous du soutien durant mon séjour ?", a: "Oui, notre service à la clientèle et d'entretien est disponible 24/7." },
+  { q: "Louez-vous aux entreprises et aux sinistrés ?", a: "Oui. Nous logeons particuliers, employés d'entreprises, ainsi que les personnes sinistrées en collaboration avec leur assureur." },
 ];
 
 export default function Faq() {
   return (
     <section id="faq" className="bg-background-2 py-[clamp(5rem,14vh,9rem)] glow">
       <div className="mx-auto w-[min(760px,100%-2.4rem)]">
-        <p className="eyebrow" data-reveal>Questions fréquentes</p>
-        <h2 className="h2" data-reveal data-delay="0.08">FAQ</h2>
+        <p className="eyebrow" data-reveal>FAQ</p>
+        <h2 className="h2" data-reveal data-delay="0.08">Foire aux questions</h2>
         <div className="mt-[clamp(2rem,5vw,3.5rem)] grid gap-3" data-reveal>
           {faqs.map((f) => (
             <details key={f.q} className="group rounded-2xl border border-border bg-white/2.5 px-6 transition-colors open:border-primary/40 open:bg-white/4.5">

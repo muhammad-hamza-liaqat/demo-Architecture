@@ -5,8 +5,8 @@ const serif = Fraunces({ subsets: ["latin"], variable: "--font-fraunces", axes: 
 const sans = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata = {
-  title: "demo.com — Architecture et design d'intérieur",
-  description: "Studio d'architecture et de design d'intérieur. Là où la vision rencontre l'architecture.",
+  title: "demo.com — Location temporaire meublée",
+  description: "La solution de relocalisation temporaire : location 100 % meublé, durée flexible, prise de possession rapide.",
 };
 
 export default function RootLayout({ children }) {

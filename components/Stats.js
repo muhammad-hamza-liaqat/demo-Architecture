@@ -4,11 +4,11 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-// Placeholder figures — replace with the studio's real numbers.
+// Placeholder figures — the original's counters animate from 0; confirm the real numbers.
 const stats = [
-  { value: 120, suffix: "+", label: "Projets réalisés" },
-  { value: 15, suffix: "", label: "Années d'expérience" },
-  { value: 30, suffix: "+", label: "Villes desservies" },
+  { value: 400, label: "Kondos" },
+  { value: 60, label: "Secteurs" },
+  { value: 350, label: "Adresses" },
 ];
 
 export default function Stats() {
@@ -18,10 +18,9 @@ export default function Stats() {
     gsap.registerPlugin(ScrollTrigger);
     const ctx = gsap.context(() => {
       gsap.utils.toArray("[data-count]").forEach((el) => {
-        const end = Number(el.dataset.count);
         const o = { v: 0 };
         gsap.to(o, {
-          v: end,
+          v: Number(el.dataset.count),
           duration: 1.8,
           ease: "power2.out",
           onUpdate: () => (el.textContent = Math.round(o.v)),
@@ -33,14 +32,14 @@ export default function Stats() {
   }, []);
 
   return (
-    <section ref={root} aria-label="Chiffres clés" className="bg-background py-[clamp(4rem,10vh,7rem)]">
-      <div className="mx-auto grid w-[min(1120px,100%-2.4rem)] grid-cols-1 gap-10 rounded-3xl border border-border bg-white/2.5 px-6 py-14 text-center min-[801px]:grid-cols-3">
-        {stats.map((s, i) => (
-          <div key={s.label} data-reveal data-delay={0.1 * i}>
-            <p className="font-serif text-[clamp(2.6rem,6vw,4rem)] leading-none text-primary">
-              <span data-count={s.value}>{s.value}</span>{s.suffix}
+    <section ref={root} aria-label="Chiffres clés" className="bg-background py-[clamp(3rem,8vh,5rem)]">
+      <div className="mx-auto grid w-[min(1120px,100%-2.4rem)] grid-cols-3 gap-4 rounded-3xl border border-border bg-white/2.5 px-4 py-10 text-center min-[801px]:py-14">
+        {stats.map((s) => (
+          <div key={s.label} data-reveal>
+            <p className="font-serif text-[clamp(2rem,6vw,4rem)] leading-none text-primary">
+              <span data-count={s.value}>{s.value}</span> +
             </p>
-            <p className="mt-3 text-[0.65rem] uppercase tracking-[0.25em] text-muted-foreground">{s.label}</p>
+            <p className="mt-3 text-[0.6rem] uppercase tracking-[0.25em] text-muted-foreground min-[801px]:text-[0.65rem]">{s.label}</p>
           </div>
         ))}
       </div>

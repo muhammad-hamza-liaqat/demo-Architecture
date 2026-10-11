@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 const links = [
-  { href: "#process", label: "Processus" },
-  { href: "#tips", label: "Conseils" },
-  { href: "#projects", label: "Projets" },
-  { href: "#services", label: "Services"},
-  { href: "#faq", label: "FAQ"},
+  { href: "#kondos", label: "Kondos" },
+  { href: "#solutions", label: "Solutions" },
+  { href: "#services", label: "Services" },
+  { href: "#blogue", label: "Blogue" },
+  { href: "#faq", label: "FAQ" },
   { href: "#contact", label: "Contact" },
 ];
 
@@ -75,9 +75,9 @@ export default function Header() {
 
           <a
             href="#contact"
-            className="rounded-full bg-primary px-5 py-2.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-primary-foreground transition-all hover:bg-foreground max-[800px]:hidden"
+            className="rounded-full bg-primary px-4 py-2.5 text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-primary-foreground transition-all hover:bg-foreground max-[800px]:hidden"
           >
-            Démarrer un projet
+            Obtenir une offre de location
           </a>
 
           <button

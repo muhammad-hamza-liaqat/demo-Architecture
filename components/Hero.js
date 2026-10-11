@@ -20,16 +20,16 @@ const timeAt = (p) => {
 
 const copy = [
   {
-    title: "Là où la vision rencontre l'architecture",
-    text: "Tout grand espace naît de son rapport à l'environnement — lumière, ombre et échelle, pensés avant même que le premier mur ne soit tracé.",
+    title: "La solution de relocalisation temporaire",
+    text: "Location 100 % meublé, durée de location flexible et prise de possession rapide.",
   },
   {
-    title: "L'entrée donne le ton",
-    text: "Un seuil n'est jamais une simple porte. C'est la première impression qu'un invité se fait d'une maison avant même d'y entrer.",
+    title: "Prise de possession rapide",
+    text: "Emménagez avec votre valise : des unités disponibles dès maintenant, parfois dès le jour de votre demande.",
   },
   {
-    title: "Des intérieurs qui respirent",
-    text: "Un espace ouvert ne consiste pas à supprimer des murs, mais à orchestrer la lumière, la circulation et le mobilier en une seule composition.",
+    title: "+ 400 unités au Québec",
+    text: "Des condos aux maisons complètes, une vaste sélection pour chaque situation.",
   },
 ];
 
