@@ -21,7 +21,9 @@ const timeAt = (p) => {
 const copy = [
   {
     title: "La solution de relocalisation temporaire",
-    text: "Location 100 % meublé, durée de location flexible et prise de possession rapide.",
+    bullets: ["Location 100% meublé", "Durée de location flexible", "Prise de possession rapide", "+ 400 unités au Québec"],
+    cta: { label: "Obtenir une offre de location", href: "#contact" },
+    badge: true,
   },
   {
     title: "Prise de possession rapide",
@@ -32,6 +34,22 @@ const copy = [
     text: "Des condos aux maisons complètes, une vaste sélection pour chaque situation.",
   },
 ];
+
+// "#1 au Québec" seal shown beside the first headline.
+function Badge() {
+  return (
+    <svg viewBox="0 0 120 120" className="mt-1 size-[4.4rem] shrink-0 -rotate-12 drop-shadow-[0_6px_18px_rgba(0,0,0,0.45)] min-[801px]:mt-2 min-[801px]:size-[6.2rem]" role="img" aria-label="Numéro 1 au Québec">
+      <defs>
+        <path id="badge-arc" d="M 60 60 m -42 0 a 42 42 0 1 0 84 0" />
+      </defs>
+      <circle cx="60" cy="60" r="60" fill="#b8a894" />
+      <text x="60" y="73" textAnchor="middle" fontFamily="var(--font-inter), sans-serif" fontWeight="900" fontSize="46" fill="#1a1a1e">#1</text>
+      <text fontFamily="var(--font-inter), sans-serif" fontWeight="800" fontSize="11" letterSpacing="2.2" fill="#1a1a1e">
+        <textPath href="#badge-arc" startOffset="50%" textAnchor="middle">AU QUÉBEC</textPath>
+      </text>
+    </svg>
+  );
+}
 
 export default function Hero() {
   const root = useRef(null);
@@ -209,9 +227,27 @@ export default function Hero() {
 
       <div className="absolute bottom-[clamp(3.5rem,12vh,7rem)] left-[clamp(1.2rem,5vw,4rem)] max-w-120">
         {copy.map((s) => (
-          <div key={s.title} data-hero-copy className="absolute bottom-0 left-0 w-[min(30rem,calc(100vw-2.4rem))] opacity-0 will-change-[transform,opacity]">
-            <h1 className="mb-[1.1rem] font-serif text-[clamp(2rem,5.2vw,4rem)] font-normal leading-[1.08] text-balance">{s.title}</h1>
-            <p className="max-w-104 text-[0.92rem] text-foreground/80">{s.text}</p>
+          <div key={s.title} data-hero-copy className="pointer-events-none absolute bottom-0 left-0 w-[min(36rem,calc(100vw-2.4rem))] opacity-0 will-change-[transform,opacity]">
+            <div className="flex items-start gap-5">
+              <h1 className="mb-[1.1rem] min-w-0 font-serif text-[clamp(1.9rem,4.8vw,3.7rem)] font-normal leading-[1.08]">{s.title}</h1>
+              {s.badge && <Badge />}
+            </div>
+            {s.text && <p className="max-w-104 text-[0.92rem] text-foreground/80">{s.text}</p>}
+            {s.bullets && (
+              <ul className="grid gap-2 text-[0.95rem] text-foreground/90">
+                {s.bullets.map((b) => (
+                  <li key={b} className="flex items-center gap-3">
+                    <svg viewBox="0 0 24 24" className="size-5 shrink-0 fill-none stroke-primary stroke-[1.6] [stroke-linecap:round] [stroke-linejoin:round]" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="m8 12.5 2.8 2.8L16 9.8" /></svg>
+                    {b}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {s.cta && (
+              <a href={s.cta.href} className="pointer-events-auto mt-7 inline-block rounded-xl bg-primary px-7 py-4 text-[0.9rem] font-medium text-primary-foreground transition-colors hover:bg-foreground">
+                {s.cta.label}
+              </a>
+            )}
           </div>
         ))}
       </div>
