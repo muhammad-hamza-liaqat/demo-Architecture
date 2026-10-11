@@ -5,13 +5,13 @@ const serif = Fraunces({ subsets: ["latin"], variable: "--font-fraunces", axes: 
 const sans = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata = {
-  title: "demo.com — Architecture & Interior Design",
-  description: "Architecture and interior design studio. Where vision meets architecture.",
+  title: "demo.com — Architecture et design d'intérieur",
+  description: "Studio d'architecture et de design d'intérieur. Là où la vision rencontre l'architecture.",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${serif.variable} ${sans.variable}`}>
+    <html lang="fr" className={`${serif.variable} ${sans.variable}`}>
       <body suppressHydrationWarning>{children}</body>
     </html>
   );

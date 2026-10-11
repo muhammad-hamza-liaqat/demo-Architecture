@@ -18,30 +18,48 @@ export default function Contact() {
   return (
     <section id="contact" className="bg-background py-[clamp(5rem,14vh,9rem)]">
       <div className="mx-auto w-[min(560px,100%-2.4rem)]">
-        <h2 className="mt-[0.6rem] font-serif text-[clamp(2rem,4vw,3rem)] font-normal leading-[1.1]" data-reveal>Start Your Project</h2>
-        <p className="mt-[0.4rem] text-[0.8rem] text-muted-foreground" data-reveal data-delay="0.08">demo.com — Architecture &amp; Interior Design</p>
+        <h2 className="mt-[0.6rem] font-serif text-[clamp(2rem,4vw,3rem)] font-normal leading-[1.1]" data-reveal>Démarrez votre projet</h2>
+        <p className="mt-[0.4rem] text-[0.8rem] text-muted-foreground" data-reveal data-delay="0.08">demo.com — Architecture et design d&apos;intérieur</p>
 
         {sent ? (
-          <p className="mt-[2.2rem] text-primary" data-reveal>Thank you — we&apos;ll be in touch shortly.</p>
+          <p className="mt-[2.2rem] text-primary" data-reveal>Merci — nous vous répondrons très bientôt.</p>
         ) : (
           <form className="mt-[2.2rem] grid gap-[1.6rem]" onSubmit={onSubmit} data-reveal data-delay="0.12">
-            <div>
-              <Label htmlFor="name">Name</Label>
-              <Input id="name" name="name" type="text" placeholder="Your name" required />
+            <div className="grid gap-[1.6rem] min-[601px]:grid-cols-2">
+              <div>
+                <Label htmlFor="firstname">Prénom</Label>
+                <Input id="firstname" name="firstname" type="text" placeholder="Votre prénom" autoComplete="given-name" required />
+              </div>
+              <div>
+                <Label htmlFor="lastname">Nom</Label>
+                <Input id="lastname" name="lastname" type="text" placeholder="Votre nom" autoComplete="family-name" required />
+              </div>
             </div>
             <div>
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" name="email" type="email" placeholder="your@email.com" required />
+              <Label htmlFor="company">Entreprise (facultatif)</Label>
+              <Input id="company" name="company" type="text" placeholder="Votre entreprise" autoComplete="organization" />
+            </div>
+            <div className="grid gap-[1.6rem] min-[601px]:grid-cols-2">
+              <div>
+                <Label htmlFor="phone">Téléphone</Label>
+                <Input id="phone" name="phone" type="tel" placeholder="(000) 000-0000" autoComplete="tel" required />
+              </div>
+              <div>
+                <Label htmlFor="email">Courriel</Label>
+                <Input id="email" name="email" type="email" placeholder="votre@courriel.com" autoComplete="email" required />
+              </div>
             </div>
             <div>
               <Label htmlFor="message">Message</Label>
-              <Textarea id="message" name="message" rows={4} placeholder="Tell us about your project" required />
+              <Textarea id="message" name="message" rows={4} placeholder="Parlez-nous de votre projet" required />
             </div>
-            <Button type="submit" className="justify-self-start">Send Message</Button>
+            <p className="text-[0.7rem] text-muted-foreground">
+              Les renseignements transmis serviront uniquement à vous répondre au sujet de nos services.
+            </p>
+            <Button type="submit" className="justify-self-start">Envoyer le message</Button>
           </form>
         )}
       </div>
-      <footer className="mt-[clamp(4rem,10vh,7rem)] text-center text-[0.7rem] tracking-[0.1em] text-muted-foreground">© {new Date().getFullYear()} demo.com</footer>
     </section>
   );
 }

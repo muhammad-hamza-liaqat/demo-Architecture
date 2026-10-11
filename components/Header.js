@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 const links = [
-  { href: "#process", label: "Process" },
-  { href: "#tips", label: "Design Tips" },
-  { href: "#projects", label: "Projects" },
+  { href: "#process", label: "Processus" },
+  { href: "#tips", label: "Conseils" },
+  { href: "#projects", label: "Projets" },
+  { href: "#services", label: "Services"},
+  { href: "#faq", label: "FAQ"},
   { href: "#contact", label: "Contact" },
 ];
 
@@ -51,20 +53,20 @@ export default function Header() {
       <header
         className={cn(
           "fixed inset-x-0 top-0 z-50 flex items-center justify-between px-[clamp(1.2rem,5vw,4rem)] py-[1.4rem] transition-all duration-400",
-          // On phones the logo/menu button sit over bright footage, so give them a soft scrim until the bar fills in.
-          !scrolled && !open && "max-[800px]:bg-linear-to-b max-[800px]:from-black/55 max-[800px]:to-transparent",
-          scrolled && "bg-background/55 py-4 backdrop-blur-[14px]",
+          // The logo/links sit over bright footage, so give them a scrim until the bar fills in.
+          !scrolled && !open && "bg-linear-to-b from-black/75 via-black/40 to-transparent max-[800px]:from-black/55 max-[800px]:via-transparent",
+          scrolled && "border-b border-border bg-background/85 py-4 shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-[14px]",
           open && "max-[800px]:bg-transparent max-[800px]:backdrop-blur-none"
         )}
       >
-        <a href="#top" onClick={close} className="font-serif text-[1.15rem] tracking-[0.02em]">demo.com</a>
+        <a href="#top" onClick={close} className="font-serif text-[1.25rem] tracking-[0.02em] [text-shadow:0_1px_8px_rgba(0,0,0,0.6)]">demo.com</a>
 
-        <nav className="flex gap-[clamp(1rem,3vw,2.5rem)] max-[800px]:hidden" aria-label="Primary">
+        <nav className="flex gap-[clamp(1rem,3vw,2.5rem)] max-[800px]:hidden" aria-label="Navigation principale">
           {links.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              className="text-[0.68rem] uppercase tracking-[0.22em] text-foreground/75 transition-colors hover:text-foreground"
+              className="text-[0.72rem] font-medium uppercase tracking-[0.22em] text-foreground [text-shadow:0_1px_8px_rgba(0,0,0,0.6)] transition-colors hover:text-primary"
             >
               {l.label}
             </a>
@@ -74,7 +76,7 @@ export default function Header() {
         <button
           type="button"
           className="-mr-2 grid size-11 place-items-center min-[801px]:hidden"
-          aria-label={open ? "Close menu" : "Open menu"}
+          aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
           aria-expanded={open}
           aria-controls="mobile-menu"
           onClick={() => setOpen((o) => !o)}

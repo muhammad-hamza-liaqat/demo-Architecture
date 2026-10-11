@@ -2,21 +2,21 @@ import { cn } from "@/lib/utils";
 
 const tips = [
   {
-    n: "Tip 01",
-    title: "Let Natural Light Lead",
-    text: "Orient rooms around daylight rather than adding it afterwards. Place the spaces you use most where the sun spends the most time, and let openings frame the changing light through the day.",
+    n: "Conseil 01",
+    title: "Laissez la lumière naturelle guider",
+    text: "Orientez les pièces selon la lumière du jour plutôt que de l'ajouter après coup. Placez les espaces les plus utilisés là où le soleil passe le plus de temps, et laissez les ouvertures cadrer la lumière changeante.",
     img: "/images/tip-1.jpg",
   },
   {
-    n: "Tip 02",
-    title: "Choose a Restrained Palette",
-    text: "Keep to neutral tones and introduce one accent material — oak, travertine, or brushed brass. Restraint lets texture and proportion do the talking.",
+    n: "Conseil 02",
+    title: "Optez pour une palette sobre",
+    text: "Restez dans les tons neutres et ajoutez un matériau d'accent — chêne, travertin ou laiton brossé. La retenue laisse la texture et les proportions s'exprimer.",
     img: "/images/tip-2.jpg",
   },
   {
-    n: "Tip 03",
-    title: "Flow Over Symmetry",
-    text: "Design for how people move through a space, not for a perfectly mirrored plan. Clear paths and considered sightlines matter far more than forced balance.",
+    n: "Conseil 03",
+    title: "La fluidité avant la symétrie",
+    text: "Concevez selon la façon dont on se déplace dans un espace, pas pour un plan parfaitement symétrique. Des parcours clairs et des perspectives réfléchies comptent bien plus qu'un équilibre forcé.",
     img: "/images/tip-3.jpg",
   },
 ];
@@ -25,8 +25,8 @@ export default function Tips() {
   return (
     <section id="tips" className="bg-background py-[clamp(5rem,14vh,9rem)]">
       <div className="mx-auto w-[min(1120px,100%-2.4rem)]">
-        <p className="text-[0.65rem] uppercase tracking-[0.28em] text-muted-foreground" data-reveal>Advice</p>
-        <h2 className="mt-[0.6rem] font-serif text-[clamp(2rem,4vw,3rem)] font-normal leading-[1.1]" data-reveal data-delay="0.08">Interior Design Tips</h2>
+        <p className="text-[0.65rem] uppercase tracking-[0.28em] text-muted-foreground" data-reveal>Inspiration</p>
+        <h2 className="mt-[0.6rem] font-serif text-[clamp(2rem,4vw,3rem)] font-normal leading-[1.1]" data-reveal data-delay="0.08">Conseils de design d'intérieur</h2>
         <div className="mt-[clamp(2.5rem,6vw,4.5rem)] grid gap-[clamp(3rem,9vw,6rem)]">
           {tips.map((t, i) => (
             <article

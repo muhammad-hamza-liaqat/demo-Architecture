@@ -20,16 +20,16 @@ const timeAt = (p) => {
 
 const copy = [
   {
-    title: "Where Vision Meets Architecture",
-    text: "Every great space starts with how it sits in its environment — light, shadow, and scale, considered before a single wall is drawn.",
+    title: "Là où la vision rencontre l'architecture",
+    text: "Tout grand espace naît de son rapport à l'environnement — lumière, ombre et échelle, pensés avant même que le premier mur ne soit tracé.",
   },
   {
-    title: "The Entrance Sets the Tone",
-    text: "A threshold is never just a door. It's the first decision a guest makes about how a home feels before they've stepped inside.",
+    title: "L'entrée donne le ton",
+    text: "Un seuil n'est jamais une simple porte. C'est la première impression qu'un invité se fait d'une maison avant même d'y entrer.",
   },
   {
-    title: "Interiors That Breathe",
-    text: "Open-plan living isn't about removing walls. It's about directing how light, movement, and furniture work together as one composition.",
+    title: "Des intérieurs qui respirent",
+    text: "Un espace ouvert ne consiste pas à supprimer des murs, mais à orchestrer la lumière, la circulation et le mobilier en une seule composition.",
   },
 ];
 
@@ -217,7 +217,7 @@ export default function Hero() {
       </div>
 
       <div data-hero-cue className="absolute bottom-[1.6rem] right-[clamp(1.2rem,5vw,4rem)] text-[0.65rem] uppercase tracking-[0.3em] text-white/70 min-[801px]:bottom-[2.2rem]">
-        Scroll
+        Défiler
       </div>
     </section>
   );
