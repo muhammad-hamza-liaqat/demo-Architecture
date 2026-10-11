@@ -34,7 +34,7 @@ export default function Stats() {
 
   return (
     <section ref={root} aria-label="Chiffres clés" className="bg-background py-[clamp(4rem,10vh,7rem)]">
-      <div className="mx-auto grid w-[min(1120px,100%-2.4rem)] grid-cols-1 gap-10 border-y border-border py-12 text-center min-[801px]:grid-cols-3">
+      <div className="mx-auto grid w-[min(1120px,100%-2.4rem)] grid-cols-1 gap-10 rounded-3xl border border-border bg-white/2.5 px-6 py-14 text-center min-[801px]:grid-cols-3">
         {stats.map((s, i) => (
           <div key={s.label} data-reveal data-delay={0.1 * i}>
             <p className="font-serif text-[clamp(2.6rem,6vw,4rem)] leading-none text-primary">

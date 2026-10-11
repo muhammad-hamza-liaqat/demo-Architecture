@@ -18,14 +18,14 @@ const projects = [
 
 export default function Projects() {
   return (
-    <section id="projects" className="bg-background-2 py-[clamp(5rem,14vh,9rem)]">
+    <section id="projects" className="bg-background-2 py-[clamp(5rem,14vh,9rem)] glow">
       <div className="mx-auto w-[min(1120px,100%-2.4rem)]">
-        <p className="text-[0.65rem] uppercase tracking-[0.28em] text-muted-foreground" data-reveal>Réalisations</p>
-        <h2 className="mt-[0.6rem] font-serif text-[clamp(2rem,4vw,3rem)] font-normal leading-[1.1]" data-reveal data-delay="0.08">Projets à l'honneur</h2>
+        <p className="eyebrow" data-reveal>Réalisations</p>
+        <h2 className="h2" data-reveal data-delay="0.08">Projets à l'honneur</h2>
         <div className="mt-[clamp(2.5rem,6vw,4.5rem)] grid grid-cols-1 gap-[clamp(1rem,2.5vw,2rem)] min-[801px]:grid-cols-3">
           {projects.map((p, i) => (
             <article key={p.title} className="group" data-reveal data-delay={0.1 * i}>
-              <div className="mb-[1.1rem] overflow-hidden">
+              <div className="relative mb-[1.1rem] overflow-hidden rounded-2xl border border-border after:absolute after:inset-0 after:bg-gradient-to-t after:from-black/40 after:to-transparent after:opacity-0 after:transition-opacity after:duration-700 group-hover:after:opacity-100">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   className="aspect-[4/3] w-full object-cover transition-transform duration-1000 ease-in-out group-hover:scale-[1.06]"
@@ -34,7 +34,7 @@ export default function Projects() {
                   loading="lazy"
                 />
               </div>
-              <h3 className="mb-[0.4rem] font-serif text-[1.1rem] font-normal">{p.title}</h3>
+              <h3 className="mb-[0.4rem] font-serif text-[1.25rem] font-normal">{p.title}</h3>
               <p className="text-[0.8rem] text-muted-foreground">{p.text}</p>
             </article>
           ))}

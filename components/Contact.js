@@ -16,9 +16,10 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="bg-background py-[clamp(5rem,14vh,9rem)]">
-      <div className="mx-auto w-[min(560px,100%-2.4rem)]">
-        <h2 className="mt-[0.6rem] font-serif text-[clamp(2rem,4vw,3rem)] font-normal leading-[1.1]" data-reveal>Démarrez votre projet</h2>
+    <section id="contact" className="bg-background py-[clamp(5rem,14vh,9rem)] glow">
+      <div className="mx-auto w-[min(640px,100%-2.4rem)] rounded-3xl border border-border bg-white/2.5 p-[clamp(1.5rem,5vw,3rem)]">
+        <p className="eyebrow" data-reveal>Contact</p>
+        <h2 className="h2" data-reveal>Démarrez votre projet</h2>
         <p className="mt-[0.4rem] text-[0.8rem] text-muted-foreground" data-reveal data-delay="0.08">demo.com — Architecture et design d&apos;intérieur</p>
 
         {sent ? (

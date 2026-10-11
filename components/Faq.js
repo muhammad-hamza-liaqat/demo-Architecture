@@ -9,13 +9,13 @@ const faqs = [
 
 export default function Faq() {
   return (
-    <section id="faq" className="bg-background-2 py-[clamp(5rem,14vh,9rem)]">
+    <section id="faq" className="bg-background-2 py-[clamp(5rem,14vh,9rem)] glow">
       <div className="mx-auto w-[min(760px,100%-2.4rem)]">
-        <p className="text-[0.65rem] uppercase tracking-[0.28em] text-muted-foreground" data-reveal>Questions fréquentes</p>
-        <h2 className="mt-[0.6rem] font-serif text-[clamp(2rem,4vw,3rem)] font-normal leading-[1.1]" data-reveal data-delay="0.08">FAQ</h2>
-        <div className="mt-[clamp(2rem,5vw,3.5rem)] border-t border-border" data-reveal>
+        <p className="eyebrow" data-reveal>Questions fréquentes</p>
+        <h2 className="h2" data-reveal data-delay="0.08">FAQ</h2>
+        <div className="mt-[clamp(2rem,5vw,3.5rem)] grid gap-3" data-reveal>
           {faqs.map((f) => (
-            <details key={f.q} className="group border-b border-border">
+            <details key={f.q} className="group rounded-2xl border border-border bg-white/2.5 px-6 transition-colors open:border-primary/40 open:bg-white/4.5">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-5 font-serif text-[1.05rem] [&::-webkit-details-marker]:hidden">
                 {f.q}
                 <span className="relative size-3 shrink-0" aria-hidden="true">

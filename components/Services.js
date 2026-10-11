@@ -18,13 +18,13 @@ const services = [
 
 export default function Services() {
   return (
-    <section id="services" className="bg-background py-[clamp(5rem,14vh,9rem)]">
+    <section id="services" className="bg-background py-[clamp(5rem,14vh,9rem)] glow">
       <div className="mx-auto w-[min(1120px,100%-2.4rem)]">
-        <p className="text-[0.65rem] uppercase tracking-[0.28em] text-muted-foreground" data-reveal>Pour qui</p>
-        <h2 className="mt-[0.6rem] font-serif text-[clamp(2rem,4vw,3rem)] font-normal leading-[1.1]" data-reveal data-delay="0.08">Nos services</h2>
+        <p className="eyebrow" data-reveal>Pour qui</p>
+        <h2 className="h2" data-reveal data-delay="0.08">Nos services</h2>
         <div className="mt-[clamp(2.5rem,6vw,4.5rem)] grid grid-cols-1 gap-[clamp(1.5rem,4vw,3rem)] min-[801px]:grid-cols-3">
           {services.map((s, i) => (
-            <article key={s.title} className="border-t border-border pt-8" data-reveal data-delay={0.1 * i}>
+            <article key={s.title} className="card" data-reveal data-delay={0.1 * i}>
               <h3 className="mb-[0.8rem] font-serif text-xl font-normal">{s.title}</h3>
               <p className="text-[0.85rem] text-muted-foreground">{s.text}</p>
               <ul className="mt-5 grid gap-2 text-[0.8rem] text-foreground/80">

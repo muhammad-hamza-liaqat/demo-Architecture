@@ -23,17 +23,17 @@ const tips = [
 
 export default function Tips() {
   return (
-    <section id="tips" className="bg-background py-[clamp(5rem,14vh,9rem)]">
+    <section id="tips" className="bg-background py-[clamp(5rem,14vh,9rem)] glow">
       <div className="mx-auto w-[min(1120px,100%-2.4rem)]">
-        <p className="text-[0.65rem] uppercase tracking-[0.28em] text-muted-foreground" data-reveal>Inspiration</p>
-        <h2 className="mt-[0.6rem] font-serif text-[clamp(2rem,4vw,3rem)] font-normal leading-[1.1]" data-reveal data-delay="0.08">Conseils de design d'intérieur</h2>
+        <p className="eyebrow" data-reveal>Inspiration</p>
+        <h2 className="h2" data-reveal data-delay="0.08">Conseils de design d'intérieur</h2>
         <div className="mt-[clamp(2.5rem,6vw,4.5rem)] grid gap-[clamp(3rem,9vw,6rem)]">
           {tips.map((t, i) => (
             <article
               key={t.n}
               className="grid grid-cols-1 items-center gap-[clamp(1.5rem,5vw,4.5rem)] min-[801px]:grid-cols-[1.15fr_1fr]"
             >
-              <div className={cn("group overflow-hidden rounded-xs", i % 2 && "min-[801px]:order-2")} data-reveal>
+              <div className={cn("group overflow-hidden rounded-3xl border border-border", i % 2 && "min-[801px]:order-2")} data-reveal>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   className="aspect-[4/3] w-full object-cover transition-transform duration-[1200ms] ease-in-out group-hover:scale-[1.04]"
